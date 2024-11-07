@@ -1,0 +1,50 @@
+#!/usr/bin/env python3
+"""
+filtered_logger.py
+
+This module provides a function to obfuscate sensitive fields in log messages.
+"""
+
+import re
+import logging
+
+
+def filter_datum(fields, redaction, message, separator):
+    """
+    Obfuscates specified fields in a log message.
+
+    Args:
+        fields (list of str): Fields to obfuscate.
+        redaction (str): String to replace field values with.
+        message (str): Log message containing key-value pairs.
+        separator (str): Separator between key-value pairs.
+
+    Returns:
+        str: Log message with specified fields obfuscated.
+
+    Example:
+        >>> filter_datum(["password", "dob"], "xxx", "name=Joe;password=secret;dob=01/01/90;", ";")
+        "name=Joe;password=xxx;dob=xxx;"
+    """
+    # Build regex to match each field=value pair for fields in `fields`.
+    # Pattern example: "(password|dob)=[^;]*" for fields ["password", "dob"]
+    return re.sub(
+        f"({'|'.join(fields)})=[^;]*",
+        lambda m: f"{m.group(1)}={redaction}",  # Replace matched field values with `redaction`.
+        message
+    )
+
+
+class RedactingFormatter(logging.Formatter):
+    """ Redacting Formatter class
+        """
+
+    REDACTION = "***"
+    FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
+    SEPARATOR = ";"
+
+    def __init__(self):
+        super(RedactingFormatter, self).__init__(self.FORMAT)
+
+    def format(self, record: logging.LogRecord) -> str:
+        NotImplementedError
