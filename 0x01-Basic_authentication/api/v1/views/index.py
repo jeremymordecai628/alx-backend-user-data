@@ -29,3 +29,10 @@ def unauthorized() -> None:
     Triggers a 401 Unauthorized error
     """
     abort(401)
+
+@app_views.route('/forbidden', methods=['GET'], strict_slashes=False)
+def forbidden() ->None:
+    """Get /api/v1/forbidden
+    Triggers a 403 forbidden error
+    """
+    abort(403) 
