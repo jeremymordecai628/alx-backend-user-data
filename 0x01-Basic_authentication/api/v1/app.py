@@ -17,6 +17,7 @@ from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
 from api.v1.auth.auth import Auth
+from api.v1.auth.basic_auth import BasicAuth
 import os
 
 # Create a Flask app instance
@@ -29,7 +30,10 @@ app.register_blueprint(app_views)
 CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
 # Create an authentication instance
-auth = Auth()
+if os.getenv('AUTH_TYPE')== 'basic_auth' :
+    auth =BasicAuth
+else :
+    auth =Auth
 
 # Custom error handler for 401 Unauthorized
 @app.errorhandler(401)
