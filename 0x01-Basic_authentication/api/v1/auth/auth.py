@@ -27,15 +27,19 @@ class Auth:
             True if authentication is required, False otherwise.
         """
 
+        # Check if any of the input parameters are None or if the excluded_paths list is empty
         if path is None or excluded_paths is None or not excluded_paths:
             return True
-        
+
+        # Normalize the path by removing any trailing slashes
         path = path.rstrip("/")
 
-        for exclude_path in excluded_paths :
+        # Iterate through the excluded paths and check for a match
+        for exclude_path in excluded_paths:
             if path == exclude_path.rstrip("/"):
                 return False
 
+        # If no match is found, authentication is required
         return True
 
     def authorization_header(self, request=None) -> str:
