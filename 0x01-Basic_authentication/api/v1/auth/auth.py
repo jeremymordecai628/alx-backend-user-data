@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 
+"""
+This module provides an abstract Auth class that defines the core functionalities for authentication and authorization 
+"""
+
 from flask import request
 from typing import List, TypeVar
 
